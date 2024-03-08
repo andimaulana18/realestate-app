@@ -38,7 +38,7 @@
                                 <td>
                                     <div class="btn-group" role="group" aria-label="Basic example">
                                         <a href="{{ route('edit.type', $item->id) }}" class="btn btn-primary">Edit</a>
-                                        <a href="" class="btn btn-danger">Delete</a>
+                                        <a href="{{ route('delete.type', $item->id) }}" class="btn btn-danger" id="delete">Delete</a>
                                     </div>
                                 </td>
                             </tr>
