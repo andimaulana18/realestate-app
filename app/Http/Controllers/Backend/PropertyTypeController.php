@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\PropertyType;
+use App\Models\Amenities;
 
 class PropertyTypeController extends Controller
 {
@@ -63,4 +64,57 @@ class PropertyTypeController extends Controller
         );
         return redirect()->back()->with($notification);
     }
+
+    // Amenities
+
+    public function AllAmenitie(){
+        $amenities = Amenities::latest()->get();
+        return view('backend.amenities.all_amenities',compact('amenities'));
+    }
+
+    public function AddAmenitie(){
+        return view('backend.amenities.add_amenities');
+    }
+
+    public function StoreAmenitie(Request $request){
+        $request->validate([
+            'amenitis_name' => 'required|unique:amenities|max:100'
+        ]);
+        amenities::insert([
+            'amenitis_name' => $request->amenitis_name,
+        ]);
+        $notification = array(
+            'message' => 'Amenities Create Successfully',
+            'alert_type' => 'success'
+        );
+        return redirect()->route('all.amenitie')->with($notification);
+    }
+
+    public function EditAmenitie($id){
+        $amenities = Amenities::findOrFail($id);
+        return view('backend.amenities.edit_amenities', compact('amenities'));
+    }
+
+    public function UpdateAmenitie(Request $request){
+        $amenitiid = $request->id;
+
+        Amenities::findOrFail($amenitiid)->update([
+            'amenitis_name' => $request->amenitis_name,
+        ]);
+        $notification = array(
+            'message' => 'Amenitis Updated Successfully',
+            'alert_type' => 'success'
+        );
+        return redirect()->route('all.amenitie')->with($notification);
+    }
+
+    public function DeleteAmenitie($id){
+        Amenities::findOrFail($id)->delete();
+        $notification = array(
+            'message' => 'Amenities Deleted Successfully',
+            'alert-type' => 'success'
+        );
+        return redirect()->back()->with($notification);
+    }
+
 }
